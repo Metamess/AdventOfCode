@@ -27,14 +27,15 @@ def part2():
 	The boxes will have IDs which differ by exactly one character at the same position in both strings.
 	What letters are common between the two correct box IDs?
 	"""
-	common_letters = []
-	with open("input/day2.txt") as box_ids:
-		for box_id in box_ids:
-			while len(common_letters) < len(box_id):
-				common_letters.append(set())
-			for i in range(len(box_id)):
+	# Assumption: all input are 26 characters long
+	id_length = 26
+	for i in range(id_length):
+		reduced_ids = set()
+		with open("input/day2.txt") as box_ids:
+			for box_id in box_ids:
+				# id_length = len(box_id)
 				reduced_id = box_id[:i] + box_id[i+1:]
-				if reduced_id in common_letters[i]:
+				if reduced_id in reduced_ids:
 					print(reduced_id)
 					return
-				common_letters[i].add(reduced_id)
+				reduced_ids.add(reduced_id)
