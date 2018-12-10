@@ -92,5 +92,5 @@ class InstructionGraph:
 						worker[1] = Step.get_duration(worker[0])
 			print(timer, " ".join([worker_status[i][0] for i in range(len(worker_status))]), executed_steps)
 			timer += 1
-		return timer - 1
+		return timer - 2  # We only notice we're done the second AFTER we are done, and then we still increment timer
 
