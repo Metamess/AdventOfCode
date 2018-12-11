@@ -44,7 +44,7 @@ def play_marble_game(players, marbles):
 	for marble_value in range(1, marbles+1):
 		# Handle case for every 23rd marble
 		if mod_23_counter == 23:
-			assert marble_value%23 is 0
+			assert marble_value % 23 is 0
 			mod_23_counter = 0
 			# Bring the marble 7 positions counter-clockwise to the front, and pop it
 			circle.rotate(7)
@@ -62,5 +62,5 @@ def play_marble_game(players, marbles):
 		mod_23_counter += 1
 		current_player += 1
 
-	# Return the highscore as result
+	# Return the high-score as result
 	return max(scores.values())

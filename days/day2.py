@@ -12,7 +12,7 @@ def part1():
 	triple_counter = 0
 	with open("input/day2.txt") as box_ids:
 		for box_id in box_ids:
-			char_counts = defaultdict(lambda: 0)
+			char_counts = defaultdict(int)
 			for char in box_id:
 				char_counts[char] += 1
 			if 2 in char_counts.values():
@@ -33,7 +33,6 @@ def part2():
 		reduced_ids = set()
 		with open("input/day2.txt") as box_ids:
 			for box_id in box_ids:
-				# id_length = len(box_id)
 				reduced_id = box_id[:i] + box_id[i+1:]
 				if reduced_id in reduced_ids:
 					print(reduced_id)

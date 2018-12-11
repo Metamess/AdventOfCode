@@ -82,7 +82,7 @@ class TargetArea:
 		area = self.mark_territories()
 		infinite_areas = self.get_infinite_areas(area)
 
-		area_per_coordinate = defaultdict(lambda: 0)
+		area_per_coordinate = defaultdict(int)
 		for y in range(self.height):
 			for x in range(self.width):
 				winner = area[y][x][0]

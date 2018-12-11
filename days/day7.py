@@ -19,7 +19,6 @@ def part2():
 	"""
 	instructions = InstructionGraph()
 	instructions.read_instructions()
-	# instructions.read_instructions("input/test_input.txt")
 	res = instructions.execute_simultaneously(5)
 	print(res)
 
@@ -32,7 +31,7 @@ class Step:
 
 	@staticmethod
 	def get_duration(letter):
-		return ord(letter) - 4  # ord('A') - 1 + 60
+		return ord(letter) - 4  # ord('A') = 65
 
 
 class InstructionGraph:
@@ -72,25 +71,28 @@ class InstructionGraph:
 		worker_status = [['.', 0] for _ in range(worker_count)]
 		next_steps = sorted(self.available_steps)
 		executed_steps = []
-		timer = 0
+		timer = -1
+
 		while len(executed_steps) < len(self.steps):
+			timer += 1
 			for worker in worker_status:
 				if worker[0] != '.':
-					assert worker[1] > 0
 					worker[1] -= 1
 					if worker[1] == 0:
+						# If the worker is done with the step, signal all steps depending on it that it's done
 						for step_id in self.steps[worker[0]].makes_available:
 							self.steps[step_id].depends_on.remove(worker[0])
+							# If this was the last remaining dependency, add this step to the available steps
 							if len(self.steps[step_id].depends_on) == 0:
 								next_steps.append(step_id)
 						next_steps.sort()
 						executed_steps.append(worker[0])
 						worker[0] = '.'
+			# Give jobs to idle workers
+			for worker in worker_status:
 				if worker[0] == '.':
 					if len(next_steps) > 0:
 						worker[0] = next_steps.pop(0)
 						worker[1] = Step.get_duration(worker[0])
-			print(timer, " ".join([worker_status[i][0] for i in range(len(worker_status))]), executed_steps)
-			timer += 1
-		return timer - 2  # We only notice we're done the second AFTER we are done, and then we still increment timer
 
+		return timer

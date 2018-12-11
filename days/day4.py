@@ -79,5 +79,3 @@ def process_sleeping_log():
 			handle_time_asleep(guards_data, current_guard, fell_asleep_at, woke_up_at)
 			fell_asleep_at = -1
 	return guards_data
-
-

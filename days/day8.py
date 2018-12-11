@@ -11,9 +11,7 @@ def part1():
 	What is the sum of all metadata entries?
 	"""
 	with open('input/day8.txt') as input_file:
-		tree_as_list = input_file.readline().split(' ')
-	for i in range(len(tree_as_list)):
-		tree_as_list[i] = int(tree_as_list[i])
+		tree_as_list = [int(n) for n in input_file.readline().split(' ')]
 
 	def process_node(input_list):
 		my_sum = 0
@@ -39,9 +37,7 @@ def part2():
 	What is the value of the root node?
 	"""
 	with open('input/day8.txt') as input_file:
-		tree_as_list = input_file.readline().split(' ')
-	for i in range(len(tree_as_list)):
-		tree_as_list[i] = int(tree_as_list[i])
+		tree_as_list = [int(n) for n in input_file.readline().split(' ')]
 
 	def process_node(input_list):
 		my_value = 0
