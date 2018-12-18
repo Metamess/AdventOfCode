@@ -1,6 +1,8 @@
 from copy import deepcopy
 from operator import attrgetter
 
+
+# Underscores make for easier reading with fonts with variable character width
 _EMPTY = '_'
 
 
@@ -12,39 +14,66 @@ def part1():
 	What is the outcome of the combat described in your puzzle input?
 	"""
 	cave, creatures = read_input()
+	print(run_combat(cave, creatures))
+
+
+def part2():
+	"""
+	After increasing the Elves' attack power until it is just barely enough for them to win without any Elves dying,
+	what is the outcome of the combat described in your puzzle input?
+	"""
+	attack_power = 3
+	outcome = None
+	while outcome is None:
+		attack_power += 1
+		cave, creatures = read_input()
+		for creature in creatures:
+			if creature.team == 'E':
+				creature.ap = attack_power
+		outcome = run_combat(cave, creatures, immortal_elves=True)
+	print(outcome)
+
+
+def run_combat(cave, creatures, immortal_elves=False):
+	"""
+	:return: The hp_sum * round number if combat has ended, or None if immortal_elves is True and an elf died
+	"""
 	elf_count = sum(1 if creature.team == "E" else 0 for creature in creatures)
 	goblin_count = len(creatures) - elf_count
 	round_number = 0
+	# Run rounds of combat until only one team is left
 	while elf_count > 0 and goblin_count > 0:
+		# Since we can't delete items from a list we're iterating over, keep track of deceased creatures separately
 		deceased_this_round = []
+		# Give every creature a turn
 		for creature in creatures:
+			# If combat ends this round, make sure we don't count it
 			if elf_count == 0 or goblin_count == 0:
 				round_number -= 1
 				break
+			# Don't give turns to dead creatures
 			if creature in deceased_this_round:
 				continue
+			# take_turn will return the creature that was killed, if any
 			deceased = creature.take_turn(cave, creatures)
 			if deceased:
 				deceased_this_round.append(deceased)
 				cave[deceased.y][deceased.x] = _EMPTY
 				if deceased.team == 'E':
+					if immortal_elves:
+						return
 					elf_count -= 1
 				else:
 					goblin_count -= 1
+		# Now we can safely remove dead creatures
 		for deceased in deceased_this_round:
 			creatures.remove(deceased)
+		# Don't forget to update the turn order when creatures have moved
 		creatures.sort()
 		round_number += 1
 
 	hp_sum = sum(creature.hp for creature in creatures)
-	print(hp_sum*round_number)
-
-
-def part2():
-	"""
-
-	"""
-	pass
+	return hp_sum * round_number
 
 
 def read_input():
@@ -67,6 +96,7 @@ def read_input():
 
 class Point:
 
+	# By keeping to this search order, the results are guaranteed to be in 'reading order'
 	search_order = [
 		{'x': 0, 'y': -1},
 		{'x': -1, 'y': 0},
@@ -147,6 +177,9 @@ class Creature(Point):
 		return None if not len(targets) else targets[0]
 
 	def attempt_attack(self, cave, creatures):
+		"""
+		:return: The creature that was killed, or None
+		"""
 		targets = []
 		# Find targets in range
 		for direction in Point.search_order:
