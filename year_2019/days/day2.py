@@ -1,3 +1,5 @@
+from . import computer
+
 
 def part1():
 	"""
@@ -10,7 +12,7 @@ def part1():
 	program = read_input()
 	program[1] = 12
 	program[2] = 2
-	program = run_program(program)
+	program = computer.run_program(program)
 	print(program[0])
 
 
@@ -28,11 +30,11 @@ def part2():
 			program = base_program.copy()
 			program[1] = noun
 			program[2] = verb
-			res = run_program(program)[0]
+			res = computer.run_program(program)[0]
 			if res == desired:
 				print(100 * noun + verb)
 				exit()
-	raise ValueError("No noun/verb combination found resulting in" + str(desired))
+	raise ValueError("No noun/verb combination found resulting in " + str(desired))
 
 
 def read_input():
@@ -40,21 +42,3 @@ def read_input():
 		return [int(x) for x in input_file.readline().split(',')]
 
 
-def run_program(program):
-	i = 0
-	while True:
-		opcode = program[i]
-		if opcode is 99:
-			break
-		p1 = program[i + 1]
-		p2 = program[i + 2]
-		p3 = program[i + 3]
-
-		if opcode is 1:
-			program[p3] = program[p1] + program[p2]
-		elif opcode is 2:
-			program[p3] = program[p1] * program[p2]
-		else:
-			raise ValueError("Unexpected opcode: " + str(opcode))
-		i += 4
-	return program
