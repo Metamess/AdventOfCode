@@ -1,5 +1,3 @@
-import math
-
 
 def part1():
 	"""
@@ -9,7 +7,7 @@ def part1():
 	res = 0
 	values = read_input()
 	for mass in values:
-		res += math.floor(mass//3) - 2
+		res += mass // 3 - 2
 	print(res)
 
 
@@ -25,7 +23,7 @@ def part2():
 	values = read_input()
 	for mass in values:
 		while True:
-			mass = math.floor(mass // 3) - 2
+			mass = mass // 3 - 2
 			if mass < 0:
 				break
 			res += mass
