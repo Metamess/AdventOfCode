@@ -15,13 +15,12 @@ def main():
     module_name = "days.day" + str(day)
     # try:
     solver_module = importlib.import_module(module_name)
-
     try:
-        getattr(solver_module, "part" + str(part))()
+        solver = getattr(solver_module, "part" + str(part))
     except AttributeError:
         print("No implementation found for day", day, "part", part)
         exit()
-
+    solver()
     # except ImportError:
     #     print("No solver found for day", day)
     #     exit()
