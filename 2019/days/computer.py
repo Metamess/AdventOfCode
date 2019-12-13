@@ -22,8 +22,13 @@ Opcode 99 means that the program is finished and should immediately halt.
 param_count = [0, 3, 3, 1, 1, 2, 2, 3, 3]
 
 
-def run_program(program, input_value=0):
+def run_program(program, input_values=None, output_values=None):
+	if input_values is None:
+		input_values = [0]
+	if output_values is None:
+		output_values = []
 	i = 0
+	input_i = 0
 	while True:
 		instruction = str(program[i])
 		# print('instruction: ' + instruction, i)
@@ -73,12 +78,17 @@ def run_program(program, input_value=0):
 			p1 = program[i + 1]
 			if modes[0] == '1':
 				raise ValueError()
-			program[p1] = input_value
+			value = input_values[input_i]
+			input_i += 1
+			if input_i == len(input_values):
+				input_i = 0
+			program[p1] = value
 
 		elif opcode is 4:  # Get
 			p1 = program[i + 1]
 			if modes[0] == '0':
 				p1 = program[p1]
+			output_values.append(p1)
 			print(p1)
 
 		elif opcode is 5:  # Jump-if-true
