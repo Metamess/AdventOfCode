@@ -27,6 +27,17 @@ def run_program(program, input_values=None, output_values=None):
 		input_values = [0]
 	if output_values is None:
 		output_values = []
+	computer_generator = get_computer(program, input_values)
+	while True:
+		value = next(computer_generator)
+		if type(value) == list:
+			return value
+		output_values.append(value)
+
+
+def get_computer(program, input_values=None):
+	if input_values is None:
+		input_values = [0]
 	i = 0
 	input_i = 0
 	while True:
@@ -78,18 +89,17 @@ def run_program(program, input_values=None, output_values=None):
 			p1 = program[i + 1]
 			if modes[0] == '1':
 				raise ValueError()
-			value = input_values[input_i]
-			input_i += 1
 			if input_i == len(input_values):
 				input_i = 0
+			value = input_values[input_i]
+			input_i += 1
 			program[p1] = value
 
 		elif opcode is 4:  # Get
 			p1 = program[i + 1]
 			if modes[0] == '0':
 				p1 = program[p1]
-			output_values.append(p1)
-			print(p1)
+			yield p1
 
 		elif opcode is 5:  # Jump-if-true
 			p1 = program[i + 1]
@@ -103,6 +113,7 @@ def run_program(program, input_values=None, output_values=None):
 			if p1 != 0:
 				i = p2
 				continue
+
 		elif opcode is 6:  # Jump-if-false
 			p1 = program[i + 1]
 			if modes[0] == '0':
@@ -133,6 +144,7 @@ def run_program(program, input_values=None, output_values=None):
 				program[p3] = 1
 			else:
 				program[p3] = 0
+
 		elif opcode is 8:  # Equals
 			p1 = program[i + 1]
 			if modes[0] == '0':
@@ -153,4 +165,4 @@ def run_program(program, input_values=None, output_values=None):
 		else:
 			raise ValueError("Unexpected opcode: " + str(opcode))
 		i += param_count[opcode] + 1
-	return program
+	yield program
