@@ -89,14 +89,14 @@ def get_computer(program, input_values=None):
 		elif opcode is 2:  # Multiplication
 			program[get_parameter(3, True)] = get_parameter(1) * get_parameter(2)
 
-		elif opcode is 3:  # Set
+		elif opcode is 3:  # Set / Use input
 			if input_i == len(input_values):
 				input_i = 0
 			value = input_values[input_i]
 			input_i += 1
 			program[get_parameter(1, True)] = value
 
-		elif opcode is 4:  # Get
+		elif opcode is 4:  # Get / Give output
 			yield get_parameter(1)
 
 		elif opcode is 5:  # Jump-if-true
