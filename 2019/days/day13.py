@@ -62,23 +62,3 @@ def part2():
 def read_input():
     with open('input/day13.txt') as input_file:
         return [int(x) for x in input_file.readline().split(',')]
-
-
-class DefaultList(list):
-    def __init__(self, constructor):
-        self.constructor = constructor
-        super(DefaultList, self).__init__()
-
-    def __getitem__(self, item):
-        if item >= len(self):
-            self.extend([self.constructor() for _ in range(1+item-len(self))])
-        return super(DefaultList, self).__getitem__(item)
-
-    def __setitem__(self, key, value):
-        if key >= len(self):
-            self.extend([self.constructor() for _ in range(1+key-len(self))])
-        return super(DefaultList, self).__setitem__(key, value)
-
-    # legend = [' ', '|', '#', '_', 'O']
-    # for row in display:
-    #     print(''.join([legend[d] for d in row]))
